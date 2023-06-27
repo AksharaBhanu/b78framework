@@ -1,11 +1,17 @@
 package generic;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -23,22 +29,22 @@ public class BaseTest {
 	
 	@Parameters({"appURL","browser","ITO","ETO"})
 	@BeforeMethod
-	public void preCondition(@Optional(DEFAULT_URL) String appURL, @Optional(DEFAULT_BROWSER) String browser, @Optional(DEFAULT_ITO) String ITO,@Optional(DEFAULT_ETO) String ETO)
+	public void preCondition(@Optional(DEFAULT_URL) String appURL, @Optional(DEFAULT_BROWSER) String browser, @Optional(DEFAULT_ITO) String ITO,@Optional(DEFAULT_ETO) String ETO) throws MalformedURLException
 	{
 		long longITO=Long.parseLong(ITO);
 		long longETO=Long.parseLong(ETO);
 		
 		if(browser.equalsIgnoreCase("chrome"))
 		{
-			driver=new ChromeDriver();
+			driver=new RemoteWebDriver(new URL("http://localhost:4444"),new ChromeOptions());
 		}
 		else if(browser.equalsIgnoreCase("firefox"))
 		{
-			driver=new FirefoxDriver();
+			driver=new RemoteWebDriver(new URL("http://localhost:4444"),new FirefoxOptions());
 		}
 		else
 		{
-			driver=new EdgeDriver();
+			driver=new RemoteWebDriver(new URL("http://localhost:4444"),new EdgeOptions());
 		}
 		
 		driver.get(appURL);
